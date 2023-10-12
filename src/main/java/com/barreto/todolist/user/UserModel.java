@@ -1,9 +1,6 @@
 package com.barreto.todolist.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,6 +15,8 @@ public class UserModel {
     private UUID id;
 
     private String name;
+
+    @Column(unique = true)
     private String username;
     private String password;
 

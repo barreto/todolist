@@ -19,7 +19,14 @@ public class UserController {
     public UserModel create(@RequestBody UserModel userModel) throws JsonProcessingException {
         System.out.println(new ObjectMapper().writeValueAsString(userModel));
 
-        return userRepository.save(userModel);
+        var isExistingUser = userRepository.findByUsername(userModel.getUsername()) != null;
+
+        if (isExistingUser) {
+            System.out.println("This username already exists");
+            return null;
+        } else {
+            return userRepository.save(userModel);
+        }
     }
 
 }
