@@ -1,6 +1,7 @@
 package com.barreto.todolist.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +17,7 @@ public class UserController {
 
     @PostMapping
     public UserModel create(@RequestBody UserModel userModel) throws JsonProcessingException {
-        System.out.println("Name: " + userModel.getName());
-        System.out.println("Username: " + userModel.getUsername());
+        System.out.println(new ObjectMapper().writeValueAsString(userModel));
 
         return userRepository.save(userModel);
     }
