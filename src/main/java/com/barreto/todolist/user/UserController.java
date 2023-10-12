@@ -13,7 +13,9 @@ public class UserController {
 
     @PostMapping
     public void create(@RequestBody UserModel userModel) throws JsonProcessingException {
-        System.out.printf(new ObjectMapper().writeValueAsString(userModel));
+        System.out.println("Name: " + userModel.getName());
+        System.out.println("Username: " + userModel.getUsername());
+        System.out.println(new ObjectMapper().writeValueAsString(userModel));
     }
 
 }
