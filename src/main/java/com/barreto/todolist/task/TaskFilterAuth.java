@@ -22,27 +22,33 @@ public class TaskFilterAuth extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        var authorization = request.getHeader("Authorization");
-        var encodedAuth = authorization.substring("Basic".length()).trim();
-        var decodedAuthBuffer = Base64.getDecoder().decode(encodedAuth);
-        var decodedAuth = new String(decodedAuthBuffer);
+        var servletPath = request.getServletPath();
 
-        var credentials = decodedAuth.split(":");
-        var username = credentials[0];
-        var password = credentials[1];
+        if (servletPath.startsWith("/tasks")) {
+            var authorization = request.getHeader("Authorization");
+            var encodedAuth = authorization.substring("Basic".length()).trim();
+            var decodedAuthBuffer = Base64.getDecoder().decode(encodedAuth);
+            var decodedAuth = new String(decodedAuthBuffer);
 
-        var user = userRepository.findByUsername(username);
+            var credentials = decodedAuth.split(":");
+            var username = credentials[0];
+            var password = credentials[1];
 
-        if (user == null) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value());
-        } else {
-            var verificationResult = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
+            var user = userRepository.findByUsername(username);
 
-            if (verificationResult.verified) {
-                chain.doFilter(request, response);
-            } else {
+            if (user == null) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
+            } else {
+                var verificationResult = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
+
+                if (verificationResult.verified) {
+                    chain.doFilter(request, response);
+                } else {
+                    response.sendError(HttpStatus.UNAUTHORIZED.value());
+                }
             }
+        } else {
+            chain.doFilter(request, response);
         }
     }
 }
