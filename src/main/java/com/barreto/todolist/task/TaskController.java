@@ -42,4 +42,12 @@ public class TaskController {
         var idUser = (UUID) request.getAttribute("idUser");
         return taskRepository.findByIdUser(idUser);
     }
+
+    @PutMapping("/{id}")
+    public TaskModel update(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request){
+        var idUser = (UUID) request.getAttribute("idUser");
+        taskModel.setIdUser(idUser);
+        taskModel.setId(id);
+        return taskRepository.save(taskModel);
+    }
 }
