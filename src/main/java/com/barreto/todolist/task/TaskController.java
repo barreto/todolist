@@ -1,5 +1,6 @@
 package com.barreto.todolist.task;
 
+import com.barreto.todolist.utils.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,10 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public TaskModel update(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request){
-        var idUser = (UUID) request.getAttribute("idUser");
-        taskModel.setIdUser(idUser);
-        taskModel.setId(id);
-        return taskRepository.save(taskModel);
+        var taskToUpdate = taskRepository.findById(id).orElse(null);
+
+        Utils.copyNonNullProperties(taskModel, taskToUpdate);
+
+        return taskRepository.save(taskToUpdate);
     }
 }
