@@ -45,11 +45,20 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public TaskModel update(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request){
+    public ResponseEntity update(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request){
         var taskToUpdate = taskRepository.findById(id).orElse(null);
+        if(taskToUpdate == null) {
+            return ResponseEntity.badRequest().body("Task not found.");
+        }
+
+        var idUser = (UUID) request.getAttribute("idUser");
+        if(!taskToUpdate.getIdUser().equals(idUser)){
+            return ResponseEntity.badRequest().body("User not authorized to update this task.");
+        }
 
         Utils.copyNonNullProperties(taskModel, taskToUpdate);
 
-        return taskRepository.save(taskToUpdate);
+        var updatedTask = taskRepository.save(taskToUpdate);
+        return ResponseEntity.ok(updatedTask);
     }
 }
