@@ -1,4 +1,4 @@
-<h1 id="todolist" align="center">todolist ☕</h1>
+<h1 align="center">todolist ☕</h1>
 
 <p align="center">Back-end application focused on task management ensuring that only the task owners can manage them through a basic authorization flow.</p>
 
@@ -116,4 +116,4 @@ That's it! 🎊
 
 ---
 
-<p align="right"><a href="#todolist">back to top ↑</a></p>
+<p align="right"><a href="#todolist-">back to top ↑</a></p>
