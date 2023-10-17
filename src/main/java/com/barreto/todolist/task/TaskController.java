@@ -21,7 +21,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) throws JsonProcessingException {
-        var idUser = (UUID) request.getAttribute("idUser");
+        var idUser = getIdUserFromRequest(request);
         taskModel.setIdUser(idUser);
 
         var currentDate = LocalDateTime.now();
@@ -39,7 +39,7 @@ public class TaskController {
 
     @GetMapping
     public List<TaskModel> list(HttpServletRequest request){
-        var idUser = (UUID) request.getAttribute("idUser");
+        var idUser = getIdUserFromRequest(request);
         return taskRepository.findByIdUser(idUser);
     }
 
@@ -50,7 +50,7 @@ public class TaskController {
             return ResponseEntity.badRequest().body("Task not found.");
         }
 
-        var idUser = (UUID) request.getAttribute("idUser");
+        var idUser = getIdUserFromRequest(request);
         if(!taskToUpdate.getIdUser().equals(idUser)){
             return ResponseEntity.badRequest().body("User not authorized to update this task.");
         }
@@ -59,5 +59,9 @@ public class TaskController {
 
         var updatedTask = taskRepository.save(taskToUpdate);
         return ResponseEntity.ok(updatedTask);
+    }
+
+    private UUID getIdUserFromRequest(HttpServletRequest request){
+        return (UUID) request.getAttribute("idUser");
     }
 }
