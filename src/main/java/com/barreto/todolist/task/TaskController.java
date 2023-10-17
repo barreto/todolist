@@ -1,6 +1,6 @@
 package com.barreto.todolist.task;
 
-import com.barreto.todolist.utils.Utils;
+import com.barreto.todolist.utils.ObjectUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class TaskController {
             return ResponseEntity.badRequest().body("User not authorized to update this task.");
         }
 
-        Utils.copyNonNullProperties(taskModel, taskToUpdate);
+        ObjectUtils.copyNonNullProperties(taskModel, taskToUpdate);
 
         var updatedTask = taskRepository.save(taskToUpdate);
         return ResponseEntity.ok(updatedTask);

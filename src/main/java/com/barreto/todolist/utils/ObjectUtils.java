@@ -7,7 +7,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 
-public class Utils {
+public class ObjectUtils {
 
     public static void copyNonNullProperties(Object source, Object target){
         BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
