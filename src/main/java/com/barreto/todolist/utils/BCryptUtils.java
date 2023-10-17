@@ -8,4 +8,8 @@ public class BCryptUtils {
         var textArray = text.toCharArray();
         return BCrypt.withDefaults().hashToString(DEFAULT_COST, textArray);
     }
+
+    public static Boolean validate(String rawValue, String hash) {
+        return BCrypt.verifyer().verify(rawValue.toCharArray(), hash).verified;
+    }
 }

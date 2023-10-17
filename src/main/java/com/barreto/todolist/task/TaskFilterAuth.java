@@ -1,7 +1,7 @@
 package com.barreto.todolist.task;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.barreto.todolist.user.UserRepository;
+import com.barreto.todolist.utils.BCryptUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,9 +39,9 @@ public class TaskFilterAuth extends OncePerRequestFilter {
             if (user == null) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
             } else {
-                var verificationResult = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
+                var isValid = BCryptUtils.validate(password, user.getPassword());
 
-                if (verificationResult.verified) {
+                if (isValid) {
                     request.setAttribute("idUser", user.getId());
                     chain.doFilter(request, response);
                 } else {
