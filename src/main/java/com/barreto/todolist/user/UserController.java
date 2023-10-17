@@ -1,6 +1,6 @@
 package com.barreto.todolist.user;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.barreto.todolist.utils.BCryptUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,7 @@ public class UserController {
         if (isExistingUser) {
             return ResponseEntity.badRequest().body("This username already exists");
         } else {
-            var passwordChars = userModel.getPassword().toCharArray();
-            var passwordHash = BCrypt.withDefaults().hashToString(12, passwordChars);
+            var passwordHash = BCryptUtils.encrypt(userModel.getPassword());
             userModel.setPassword(passwordHash);
 
             var userCreated = userRepository.save(userModel);
