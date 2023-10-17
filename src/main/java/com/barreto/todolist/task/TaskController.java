@@ -21,7 +21,6 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) throws JsonProcessingException {
-        System.out.println("Hi from Controller!");
         var idUser = (UUID) request.getAttribute("idUser");
         taskModel.setIdUser(idUser);
 
