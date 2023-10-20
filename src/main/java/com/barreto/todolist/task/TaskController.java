@@ -47,7 +47,7 @@ public class TaskController {
     public ResponseEntity update(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request) {
         var taskToUpdate = taskRepository.findById(id).orElse(null);
         if (taskToUpdate == null) {
-            return ResponseEntity.badRequest().body("Task not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
         }
 
         var idUser = getIdUserFromRequest(request);
