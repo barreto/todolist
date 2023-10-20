@@ -13,7 +13,7 @@ public class ObjectUtils {
         BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
     }
 
-    public static String[] getNullPropertyNames(Object source) {
+    private static String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
 
         PropertyDescriptor[] pds = src.getPropertyDescriptors();
