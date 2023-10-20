@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class ObjectUtils {
 
-    public static void copyNonNullProperties(Object source, Object target){
+    public static void copyNonNullProperties(Object source, Object target) {
         BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
     }
 
@@ -20,10 +20,10 @@ public class ObjectUtils {
 
         var emptyNames = new HashSet<>();
 
-        for (PropertyDescriptor pd : pds){
+        for (PropertyDescriptor pd : pds) {
             Object srcValue = src.getPropertyValue(pd.getName());
 
-            if(srcValue == null) emptyNames.add(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
         }
 
         String[] result = new String[emptyNames.size()];
