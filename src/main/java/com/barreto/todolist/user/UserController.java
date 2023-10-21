@@ -31,7 +31,8 @@ public class UserController {
             userModel.setPassword(passwordHash);
 
             var userCreated = userRepository.save(userModel);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
+            var userCreateOutDTO = new UserCreateOutDTO(userCreated);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userCreateOutDTO);
         }
     }
 }
