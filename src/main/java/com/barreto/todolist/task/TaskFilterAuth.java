@@ -36,15 +36,16 @@ public class TaskFilterAuth extends OncePerRequestFilter {
 
         if (user == null) {
             response.sendError(HttpStatus.UNAUTHORIZED.value());
-        } else {
-            var isValid = BCryptUtils.validate(credentialsHelper.getPassword(), user.getPassword());
-
-            if (isValid) {
-                request.setAttribute("idUser", user.getId());
-                chain.doFilter(request, response);
-            } else {
-                response.sendError(HttpStatus.UNAUTHORIZED.value());
-            }
+            return;
         }
+
+        var isValid = BCryptUtils.validate(credentialsHelper.getPassword(), user.getPassword());
+        if (isValid) {
+            request.setAttribute("idUser", user.getId());
+            chain.doFilter(request, response);
+            return;
+        }
+
+        response.sendError(HttpStatus.UNAUTHORIZED.value());
     }
 }
