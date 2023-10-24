@@ -1,5 +1,6 @@
 package com.barreto.todolist.task;
 
+import com.barreto.todolist.helpers.CredentialsHelper;
 import com.barreto.todolist.user.UserRepository;
 import com.barreto.todolist.utils.BCryptUtils;
 import jakarta.servlet.FilterChain;
@@ -30,20 +31,13 @@ public class TaskFilterAuth extends OncePerRequestFilter {
         }
 
         var authorization = request.getHeader("Authorization");
-        var encodedAuth = authorization.substring("Basic".length()).trim();
-        var decodedAuthBuffer = Base64.getDecoder().decode(encodedAuth);
-        var decodedAuth = new String(decodedAuthBuffer);
-
-        var credentials = decodedAuth.split(":");
-        var username = credentials[0];
-        var password = credentials[1];
-
-        var user = userRepository.findByUsername(username);
+        var credentialsHelper = new CredentialsHelper(authorization);
+        var user = userRepository.findByUsername(credentialsHelper.getUsername());
 
         if (user == null) {
             response.sendError(HttpStatus.UNAUTHORIZED.value());
         } else {
-            var isValid = BCryptUtils.validate(password, user.getPassword());
+            var isValid = BCryptUtils.validate(credentialsHelper.getPassword(), user.getPassword());
 
             if (isValid) {
                 request.setAttribute("idUser", user.getId());
