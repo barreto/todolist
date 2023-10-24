@@ -23,33 +23,34 @@ public class TaskFilterAuth extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         var servletPath = request.getServletPath();
-
-        if (servletPath.startsWith("/tasks")) {
-            var authorization = request.getHeader("Authorization");
-            var encodedAuth = authorization.substring("Basic".length()).trim();
-            var decodedAuthBuffer = Base64.getDecoder().decode(encodedAuth);
-            var decodedAuth = new String(decodedAuthBuffer);
-
-            var credentials = decodedAuth.split(":");
-            var username = credentials[0];
-            var password = credentials[1];
-
-            var user = userRepository.findByUsername(username);
-
-            if (user == null) {
-                response.sendError(HttpStatus.UNAUTHORIZED.value());
-            } else {
-                var isValid = BCryptUtils.validate(password, user.getPassword());
-
-                if (isValid) {
-                    request.setAttribute("idUser", user.getId());
-                    chain.doFilter(request, response);
-                } else {
-                    response.sendError(HttpStatus.UNAUTHORIZED.value());
-                }
-            }
-        } else {
+        var isTasksFeature = servletPath.startsWith("/tasks");
+        if (!isTasksFeature) {
             chain.doFilter(request, response);
+            return;
+        }
+
+        var authorization = request.getHeader("Authorization");
+        var encodedAuth = authorization.substring("Basic".length()).trim();
+        var decodedAuthBuffer = Base64.getDecoder().decode(encodedAuth);
+        var decodedAuth = new String(decodedAuthBuffer);
+
+        var credentials = decodedAuth.split(":");
+        var username = credentials[0];
+        var password = credentials[1];
+
+        var user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
+        } else {
+            var isValid = BCryptUtils.validate(password, user.getPassword());
+
+            if (isValid) {
+                request.setAttribute("idUser", user.getId());
+                chain.doFilter(request, response);
+            } else {
+                response.sendError(HttpStatus.UNAUTHORIZED.value());
+            }
         }
     }
 }
