@@ -18,17 +18,18 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody UserModel userModel) throws JsonProcessingException {
-        System.out.println(new ObjectMapper().writeValueAsString(userModel));
+    public ResponseEntity create(@RequestBody UserCreateInDTO userCreateInDTO) throws JsonProcessingException {
+        System.out.println(new ObjectMapper().writeValueAsString(userCreateInDTO));
 
+        var userModel = new UserModel(userCreateInDTO);
         var isExistingUser = userRepository.findByUsername(userModel.getUsername()) != null;
 
         if (isExistingUser) return ResponseEntity.badRequest().body("This username already exists");
 
         userModel.hashPassword();
-
         var userCreated = userRepository.save(userModel);
         var userCreateOutDTO = new UserCreateOutDTO(userCreated);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(userCreateOutDTO);
     }
 }
