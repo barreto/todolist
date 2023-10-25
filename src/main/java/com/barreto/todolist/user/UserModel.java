@@ -1,5 +1,6 @@
 package com.barreto.todolist.user;
 
+import com.barreto.todolist.utils.BCryptUtils;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,4 +23,8 @@ public class UserModel {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public void hashPassword() {
+        this.password = BCryptUtils.encrypt(this.password);
+    }
 }

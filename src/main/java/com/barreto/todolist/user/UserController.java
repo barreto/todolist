@@ -1,6 +1,5 @@
 package com.barreto.todolist.user;
 
-import com.barreto.todolist.utils.BCryptUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,7 @@ public class UserController {
 
         if (isExistingUser) return ResponseEntity.badRequest().body("This username already exists");
 
-        var passwordHash = BCryptUtils.encrypt(userModel.getPassword());
-        userModel.setPassword(passwordHash);
+        userModel.hashPassword();
 
         var userCreated = userRepository.save(userModel);
         var userCreateOutDTO = new UserCreateOutDTO(userCreated);
