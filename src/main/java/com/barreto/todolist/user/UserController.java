@@ -24,15 +24,13 @@ public class UserController {
 
         var isExistingUser = userRepository.findByUsername(userModel.getUsername()) != null;
 
-        if (isExistingUser) {
-            return ResponseEntity.badRequest().body("This username already exists");
-        } else {
-            var passwordHash = BCryptUtils.encrypt(userModel.getPassword());
-            userModel.setPassword(passwordHash);
+        if (isExistingUser) return ResponseEntity.badRequest().body("This username already exists");
 
-            var userCreated = userRepository.save(userModel);
-            var userCreateOutDTO = new UserCreateOutDTO(userCreated);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userCreateOutDTO);
-        }
+        var passwordHash = BCryptUtils.encrypt(userModel.getPassword());
+        userModel.setPassword(passwordHash);
+
+        var userCreated = userRepository.save(userModel);
+        var userCreateOutDTO = new UserCreateOutDTO(userCreated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userCreateOutDTO);
     }
 }
