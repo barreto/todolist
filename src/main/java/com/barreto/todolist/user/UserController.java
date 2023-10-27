@@ -25,7 +25,7 @@ public class UserController {
 
         if (isExistingUser) return ResponseEntity.badRequest().body("This username already exists");
 
-        userModel.hashPassword();
+        userModel.encryptPassword();
         var userCreated = userRepository.save(userModel);
         var userCreateOutDTO = new UserCreateOutDTO(userCreated);
 
