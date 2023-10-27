@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody UserCreateInDTO userCreateInDTO) throws JsonProcessingException {
+    public ResponseEntity create(@RequestBody UserCreateInDTO userCreateInDTO, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
         System.out.println(new ObjectMapper().writeValueAsString(userCreateInDTO));
 
         var userModel = new UserModel(userCreateInDTO);
@@ -27,9 +28,9 @@ public class UserController {
 
         userModel.encryptPassword();
         var userCreated = userRepository.save(userModel);
-        var userCreateOutDTO = new UserCreateOutDTO(userCreated);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userCreateOutDTO);
+        var uri = uriComponentsBuilder.path("/users/{id}").buildAndExpand(userCreated.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{id}")
