@@ -98,7 +98,7 @@ That's it! 🎊
 [
 ![Collection preview.png](./docs/assets/insomnia-todolist-create-user.png)
 ![Import in Insomnia](https://insomnia.rest/images/run.svg)
-](./docs/assets/Todolist-Insomnia_2023-10-15)
+](./docs/assets/Todolist-Insomnia-collection)
 
 ## References
 - **Thanking**
