@@ -34,7 +34,7 @@ public class UserModel {
         this.setPassword(userCreateInDTO.password());
     }
 
-    public void hashPassword() {
+    public void encryptPassword() {
         this.password = BCryptUtils.encrypt(this.password);
     }
 }
