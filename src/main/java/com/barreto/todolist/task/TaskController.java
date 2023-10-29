@@ -34,13 +34,16 @@ public class TaskController {
         }
 
         var taskCreated = taskRepository.save(taskModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(taskCreated);
+        var taskOutDTO = new TaskOutDTO(taskCreated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskOutDTO);
     }
 
     @GetMapping
-    public List<TaskModel> list(HttpServletRequest request) {
+    public List<TaskOutDTO> list(HttpServletRequest request) {
         var idUser = getIdUserFromRequest(request);
-        return taskRepository.findByIdUser(idUser);
+        var taskModels = taskRepository.findByIdUser(idUser);
+        var taskOutDTOStream = taskModels.stream().map(TaskOutDTO::new);
+        return taskOutDTOStream.toList();
     }
 
     @PutMapping("/{id}")
@@ -58,7 +61,8 @@ public class TaskController {
         ObjectUtils.copyNonNullProperties(taskModel, taskToUpdate);
 
         var updatedTask = taskRepository.save(taskToUpdate);
-        return ResponseEntity.ok(updatedTask);
+        var taskOutDTO = new TaskOutDTO(updatedTask);
+        return ResponseEntity.ok(taskOutDTO);
     }
 
     private UUID getIdUserFromRequest(HttpServletRequest request) {
