@@ -1,6 +1,6 @@
 package com.barreto.todolist.task;
 
-import com.barreto.todolist.enums.Priority;
+import com.barreto.todolist.enums.TaskPriority;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +11,7 @@ public record TaskOutDTO(
         String description,
         LocalDateTime startAt,
         LocalDateTime endAt,
-        Priority priority
+        TaskPriority priority
 ) {
     public TaskOutDTO(TaskModel taskModel) {
         this(taskModel.getId(),
