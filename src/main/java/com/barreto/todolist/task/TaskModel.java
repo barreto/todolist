@@ -28,6 +28,9 @@ public class TaskModel {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.ORDINAL)
+    private TaskStatus status = TaskStatus.CREATED;
+
     public void setTitle(String title) throws Exception {
         if (title.length() > 50) {
             throw new Exception("Title field must contains in maximum 50 characters.");
