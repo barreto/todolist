@@ -1,5 +1,6 @@
 package com.barreto.todolist.task;
 
+import com.barreto.todolist.enums.Priority;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,7 +20,9 @@ public class TaskModel {
     private String description;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
-    private String priority;
+
+    @Enumerated(EnumType.ORDINAL)
+    private Priority priority;
 
     private UUID idUser;
 
