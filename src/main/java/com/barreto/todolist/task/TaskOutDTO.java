@@ -1,7 +1,5 @@
 package com.barreto.todolist.task;
 
-import com.barreto.todolist.enums.TaskPriority;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

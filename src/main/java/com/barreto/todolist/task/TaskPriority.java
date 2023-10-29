@@ -1,4 +1,4 @@
-package com.barreto.todolist.enums;
+package com.barreto.todolist.task;
 
 public enum TaskPriority {
     EMERGENCY(1),

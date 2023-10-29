@@ -1,6 +1,5 @@
 package com.barreto.todolist.task;
 
-import com.barreto.todolist.enums.TaskPriority;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
