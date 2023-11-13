@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +21,7 @@ public class TaskController {
     private TaskRepository taskRepository;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder) throws JsonProcessingException {
         var idUser = getIdUserFromRequest(request);
         taskModel.setIdUser(idUser);
 
@@ -34,8 +35,10 @@ public class TaskController {
         }
 
         var taskCreated = taskRepository.save(taskModel);
-        var taskOutDTO = new TaskOutDTO(taskCreated);
-        return ResponseEntity.status(HttpStatus.CREATED).body(taskOutDTO);
+
+        var uri = uriComponentsBuilder.path("/tasks/{id}").buildAndExpand(taskCreated.getId()).toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping
