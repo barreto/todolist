@@ -46,6 +46,22 @@ public class TaskController {
         return taskOutDTOStream.toList();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity find(@PathVariable UUID id, HttpServletRequest request) {
+        var foundedTask = taskRepository.findById(id).orElse(null);
+        if (foundedTask == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
+        }
+
+        var idUser = getIdUserFromRequest(request);
+        if (!foundedTask.getIdUser().equals(idUser)) {
+            return ResponseEntity.badRequest().body("User not authorized to update this task.");
+        }
+
+        var taskOutDTO = new TaskOutDTO(foundedTask);
+        return ResponseEntity.ok(taskOutDTO);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity update(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request) {
         var taskToUpdate = taskRepository.findById(id).orElse(null);
